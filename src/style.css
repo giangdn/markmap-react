@@ -1,0 +1,94 @@
+@import url("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.0/dist/tailwind.min.css");
+:root {
+  --markmap-circle-open-bg: white;
+}
+
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+.mm-toolbar {
+  border-radius: 1.5rem;
+  border-color: #e2e8f0 !important;
+}
+
+.mm-toolbar .mm-toolbar-item {
+  border-radius: 100%;
+  padding: 0.25rem;
+}
+
+.mm-toolbar .mm-toolbar-item > * {
+  color: #3c3c3c;
+}
+
+.mm-toolbar .mm-toolbar-item:hover {
+  background-color: #f0f9ff;
+  transition: all 0.2s ease-in-out;
+}
+
+.mm-toolbar .mm-toolbar-item:hover > * {
+  transition: all 0.2s ease-in-out;
+  color: #0084d1 !important;
+}
+
+.markmap {
+  background-image:
+    linear-gradient(90deg, #ebebeb88 1px, #0000 1px),
+    linear-gradient(#ebebeb88 1px, #0000 1px);
+  background-size: 1.25rem 1.25rem;
+}
+
+.markmap .markmap-node .markmap-foreign {
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+}
+
+.markmap .markmap-node > line {
+  display: none;
+}
+.markmap .markmap-node .markmap-foreign > div {
+  transform: translateY(50%);
+  position: relative;
+  line-height: 1;
+  width: fit-content;
+  background-color: white;
+}
+
+.markmap .markmap-node .markmap-foreign > div::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-3.5px);
+  left: -8px;
+  width: 8px;
+  height: 8px;
+  border-width: 1.5px;
+  border-radius: 12px;
+  border-style: solid;
+  border-color: #e2e8f0;
+  background-color: var(--node-color, white);
+}
+.markmap .markmap-node[data-depth="1"] .markmap-foreign > div::after {
+  display: none;
+}
+
+.markmap .markmap-node .markmap-foreign > div div {
+  padding: 6px 10px;
+  margin-bottom: -2px;
+  border-color: color-mix(in srgb, var(--node-color) 80%, #e2e8f0);
+  border-width: 1.5px;
+  border-radius: 12px;
+  border-style: solid;
+  background: color-mix(in srgb, var(--node-color) 8%, transparent);
+  font-size: 14px;
+  line-height: 1.25;
+  min-width: 8rem;
+  color: #3c3c3c;
+}
+
+.markmap .markmap-node circle {
+  z-index: 2;
+  position: relative;
+}
