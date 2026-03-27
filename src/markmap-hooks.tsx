@@ -1,27 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { Markmap } from "markmap/packages/markmap-view";
-import { transformer } from "./markmap";
+import useTransformer from "./markmap";
 import { Toolbar } from "markmap/packages/markmap-toolbar";
 import "markmap/packages/markmap-toolbar/dist/style.css";
 import { INode } from "markmap/packages/markmap-common/dist/types/common";
 
-const initValue = `# Lê Trang Tông (trị vì 1533 - 1548)
-  - Con: Lê Trung Tông (trị vì 1548)
-  - Con: Lê Anh Tông (trị vì 1556 - 1573)
-    - Con: Lê Thế Tông (trị vì 1573 - 1599; khi nhỏ là hoàng tử Lê Duy Đàm)
-      - Con: Lê Kính Tông (trị vì 1600 - 1619; hoàng tử Lê Duy Kỳ)
-        - Con: Lê Thần Tông (trị vì 1619 - 1643, 1649 - 1662; hai lần lên ngôi)
-          - Con: Lê Chân Tông (trị vì 1643 - 1649)
-          - Con: Lê Huyền Tông (trị vì 1662 - 1671)
-            - Em họ/chi thứ kế vị: Lê Gia Tông (trị vì 1672 - 1675)
-              - Kế vị trong tông thất: Lê Hy Tông (trị vì 1675 - 1705)
-                - Con: Lê Dụ Tông (trị vì 1705 - 1729)
-                  - Con: Lê Duy Phường (trị vì 1729 - 1732)
-                  - Con: Lê Thuần Tông (trị vì 1732 - 1735)
-                  - Con: Lê Ý Tông (trị vì 1735 - 1740)
-                  - Con: Lê Hiển Tông (trị vì 1740 - 1786)
-                    - Con: Lê Chiêu Thống (trị vì 1786 - 1789; trước là hoàng tử Lê Duy Kỳ)
-                    - Em: Lê Duy Cận (hoàng tử, từng làm Giám quốc 1787 - 1788)`;
+const initValue = ` # Giải phương trình bậc 2
+- Bước 1: Tính $\\Delta = b^2 - 4ac$.
+- Bước 2:
+  - Nếu $\\Delta > 0$: có hai nghiệm ==phân biệt==  $\\sqrt{\\Delta}{2a}.$
+  - Nếu $\\Delta = 0$: \`có nghiệm kép\`
+    $x = -\\frac{b}{2a}.$
+  - [x] Nếu $\\Delta < 0$: phương trình vô nghiệm trong tập số thực.`;
 
 function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
   while (wrapper?.firstChild) wrapper.firstChild.remove();
@@ -42,13 +32,15 @@ function renderToolbar(mm: Markmap, wrapper: HTMLElement) {
 }
 
 export default function MarkmapHooks() {
-  const [value, setValue] = useState(initValue);
+  // const [value, setValue] = useState(initValue);
   // Ref for SVG element
   const refSvg = useRef<SVGSVGElement | null>(null);
   // Ref for markmap object
   const refMm = useRef<Markmap | null>(null);
   // Ref for toolbar wrapper
   const refToolbar = useRef<HTMLDivElement | null>(null);
+
+  const { transformer, loading } = useTransformer();
 
   // 1. Define your color list as colors from all default tailwindcss colors hex
   const hex500Array = [
@@ -93,12 +85,12 @@ export default function MarkmapHooks() {
 
     mm.setOptions({
       color,
-      // initialExpandLevel: 5,
-      spacingHorizontal: 60,
+      spacingHorizontal: 120,
       spacingVertical: 20,
       fitRatio: 0.95,
       autoFit: true,
       duration: 300,
+      maxWidth: 320,
     });
 
     renderToolbar(refMm.current, refToolbar.current as HTMLElement);
@@ -107,21 +99,19 @@ export default function MarkmapHooks() {
   useEffect(() => {
     // Update data for markmap once value is changed
     const mm = refMm.current;
-    if (!mm) return;
-    const { root } = transformer.transform(value);
-    mm.setData(root).then(() => mm.fit());
-  }, [refMm.current, value]);
+    if (!mm || !transformer || loading) return;
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-    setValue(e.target.value);
+    const { root } = transformer.transform(initValue);
+
+    mm.setData(root).then(() => mm.fit());
+  }, [transformer]);
 
   return (
     <React.Fragment>
       <div>
         <textarea
           className="w-full h-full border border-gray-400"
-          value={value}
-          onChange={handleChange}
+          value={initValue}
         />
       </div>
       <div className="flex-1">

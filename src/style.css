@@ -52,8 +52,9 @@
   transform: translateY(50%);
   position: relative;
   line-height: 1;
-  width: fit-content;
-  background-color: white;
+  /* width: auto;
+  max-width: 20rem; */
+  /* background-color: white; */
 }
 
 .markmap .markmap-node .markmap-foreign > div::after {
@@ -84,8 +85,20 @@
   background: color-mix(in srgb, var(--node-color) 8%, transparent);
   font-size: 14px;
   line-height: 1.25;
-  min-width: 8rem;
   color: #3c3c3c;
+  position: relative;
+}
+
+.markmap .markmap-node .markmap-foreign > div > div::before {
+  content: "";
+  background-color: white;
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
 }
 
 .markmap .markmap-node circle {
