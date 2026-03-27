@@ -8,6 +8,8 @@ import { Transformer } from "markmap/packages/markmap-lib";
 import * as markmap from "markmap/packages/markmap-view";
 import { useEffect, useState } from "react";
 
+const npmCdn = "https://cdn.jsdelivr.net/npm/";
+
 const useTransformer = () => {
   const [transformer, setTransformer] = useState<Transformer | undefined>();
   const [loading, setLoading] = useState(true);
@@ -20,9 +22,7 @@ const useTransformer = () => {
       // manually add KaTeX js
       const katexJs: JSItem = {
         type: "script",
-        data: {
-          src: "https://cdn.jsdelivr.net/npm/katex@0.16.18/dist/katex.min.js",
-        },
+        data: { src: `${npmCdn}katex@0.16.18/dist/katex.min.js` },
       };
       scripts?.push(katexJs);
 
